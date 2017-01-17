@@ -2,7 +2,9 @@ package me.ajfleming.qikserve.dao;
 
 import me.ajfleming.qikserve.helpers.RowMapperConverter;
 import me.ajfleming.qikserve.model.Basket;
+import me.ajfleming.qikserve.model.BasketPromotion;
 import me.ajfleming.qikserve.model.Item;
+import me.ajfleming.qikserve.model.Promotion;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,6 +36,20 @@ public class BasketDAOImpl_JDBC implements BasketDAO {
     }
 
     @Override
+    public Basket editBasket(Basket basket) {
+        try
+        {
+            String sql = "UPDATE basket SET completed=?, finalTotal=?, totalSavings=?";
+            jdbc.update(sql, basket.isCompleted(), basket.getFinalTotal(), basket.getTotalSavings());
+            return basket;
+        }
+        catch (DataAccessException e)
+        {
+            return null;
+        }
+    }
+
+    @Override
     public Basket getBasket(int id){
         String sql = "SELECT * FROM basket WHERE id = ?";
         try
@@ -54,20 +70,6 @@ public class BasketDAOImpl_JDBC implements BasketDAO {
             return jdbc.query(sql, new Object[] {}, RowMapperConverter.getRowMapperForBasket());
         }
         catch(EmptyResultDataAccessException e)
-        {
-            return null;
-        }
-    }
-
-    @Override
-    public Basket editBasket(Basket basket) {
-        try
-        {
-            String sql = "UPDATE basket SET completed=?, finalTotal=?, totalSavings=?";
-            jdbc.update(sql, basket.isCompleted(), basket.getFinalTotal(), basket.getTotalSavings());
-            return basket;
-        }
-        catch (DataAccessException e)
         {
             return null;
         }

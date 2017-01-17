@@ -1,5 +1,6 @@
 package me.ajfleming.qikserve.controller;
 
+import me.ajfleming.qikserve.exception.BasketException;
 import me.ajfleming.qikserve.message.APIResponse;
 import me.ajfleming.qikserve.model.*;
 import me.ajfleming.qikserve.type.DeleteStatus;
@@ -107,7 +108,7 @@ public class AppController {
 
     public APIResponse createBasket()
     {
-        int id =  basketController.createOrder();
+        int id =  basketController.createBasket();
         if(id != 0) {
             APIResponse response = new APIResponse(HttpStatus.CREATED, "An Basket has been created. Use the Basket Number below to add items to your order");
             response.addValue("Basket Number", "" + id + "");
@@ -123,6 +124,8 @@ public class AppController {
     {
         Basket basket = basketController.getBasket(basketId);
         if(basket == null) return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Basket");
+
+        if(basket.isCompleted()) return new APIResponse(HttpStatus.BAD_REQUEST, "This basket has been closed. No further items can be completed");
 
         Item item;
         if(identifierType.equals("id")) {
@@ -235,6 +238,29 @@ public class AppController {
         else
         {
             return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Could not remove Item to Promotion due to internal server error");
+        }
+    }
+
+    public APIResponse finaliseAndCloseBasket(int basketId)
+    {
+        Basket basket = basketController.getBasket(basketId);
+        if(basket == null)
+        {
+            return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Item");
+        }
+
+        try {
+            basket = basketController.calculatePriceAndSavings(basket);
+            basket.setCompleted(true);
+            basketController.updateBasket(basket);
+            APIResponse response = new APIResponse(HttpStatus.OK, "Thank you for shopping with QikServe Supermarket! Your totals are show below");
+            response.addValue("finalTotal", ""+ basket.getFinalTotal() + "");
+            response.addValue("totalSavings", ""+ basket.getTotalSavings() + "");
+            return response;
+        }
+        catch(BasketException e)
+        {
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }
