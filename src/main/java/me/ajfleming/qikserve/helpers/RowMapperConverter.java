@@ -1,9 +1,6 @@
 package me.ajfleming.qikserve.helpers;
 
-import me.ajfleming.qikserve.model.FreeItemPromotion;
-import me.ajfleming.qikserve.model.Item;
-import me.ajfleming.qikserve.model.MoneyOffPromotion;
-import me.ajfleming.qikserve.model.Promotion;
+import me.ajfleming.qikserve.model.*;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -64,6 +61,20 @@ public class RowMapperConverter {
                 item.setPrice(rs.getFloat("price"));
                 item.setActive(rs.getBoolean("active"));
                 return item;
+            }
+        };
+    }
+
+    public static RowMapper<Basket> getRowMapperForBasket() {
+        return new RowMapper<Basket>(){
+            public Basket mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Basket basket = new Basket();
+                basket.setId(rs.getInt("id"));
+                basket.setCompleted(rs.getBoolean("completed"));
+                basket.setTimestamp(rs.getTimestamp("timestamp"));
+                basket.setFinalTotal(rs.getFloat("finalTotal"));
+                basket.setTotalSavings(rs.getFloat("totalSavings"));
+                return basket;
             }
         };
     }

@@ -1,5 +1,6 @@
 package me.ajfleming.qikserve.dao;
 
+import me.ajfleming.qikserve.model.Basket;
 import me.ajfleming.qikserve.model.Item;
 import me.ajfleming.qikserve.model.Promotion;
 import me.ajfleming.qikserve.type.DeleteStatus;
@@ -19,4 +20,5 @@ public interface ItemDAO {
     DeleteStatus deleteItem(int id);
 
     List<Item> getPromotionItems(Promotion promo);
+    List<Item> getBasketItems(Basket basket);
 }

@@ -129,21 +129,6 @@ public class PromotionDAOImpl_JDBC implements PromotionDAO {
         }
     }
 
-    public List<Item> getPromotionItems(Promotion promo)
-    {
-        String sql = "SELECT i.* FROM promotion_v p, item i, ";
-        return jdbc.query(sql, RowMapperConverter.getRowMapperForItem());
-    }
-
-    private Promotion updatePromoItems(Promotion promo)
-    {
-        List<Item> items = (List<Item>) promo.getValidItems().values();
-
-
-
-        return null;
-    }
-
     @Override
     public List<Promotion> getPromotions() {
         String sql = "SELECT * FROM promotion_v WHERE active = TRUE";
@@ -171,6 +156,34 @@ public class PromotionDAOImpl_JDBC implements PromotionDAO {
         catch(EmptyResultDataAccessException e)
         {
             return null;
+        }
+    }
+
+    @Override
+    public boolean addItemToPromotion(Promotion promo, Item item) {
+        try
+        {
+            String sql = "INSERT INTO promotionItem (promotionId,itemId) VALUES (?,?)";
+            jdbc.update(sql, promo.getId(), item.getId());
+            return true;
+        }
+        catch(DataAccessException e)
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeItemFromPromotion(Promotion promo, Item item) {
+        try
+        {
+            String sql = "DELETE FROM promotionItem WHERE promotionId = ? AND itemId = ? LIMIT 1";
+            jdbc.update(sql, promo.getId(), item.getId());
+            return true;
+        }
+        catch(DataAccessException e)
+        {
+            return false;
         }
     }
 

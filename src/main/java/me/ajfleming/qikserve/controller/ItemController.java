@@ -4,7 +4,9 @@ import me.ajfleming.qikserve.dao.ItemDAO;
 import me.ajfleming.qikserve.dao.ItemDAOImpl_JDBC;
 import me.ajfleming.qikserve.dao.PromotionDAO;
 import me.ajfleming.qikserve.dao.PromotionDAOImpl_JDBC;
+import me.ajfleming.qikserve.model.Basket;
 import me.ajfleming.qikserve.model.Item;
+import me.ajfleming.qikserve.model.Promotion;
 import me.ajfleming.qikserve.type.DeleteStatus;
 import org.hibernate.sql.Delete;
 
@@ -27,23 +29,33 @@ public class ItemController {
         return itemDAO.getItems();
     }
 
-    public Item save(Item item) {
+    Item save(Item item) {
         return itemDAO.save(item);
     }
 
-    public Item getItem(int id)
+    Item getItem(int id)
     {
         return itemDAO.getItem(id);
     }
 
-    public Item getItem(String barcode)
+    Item getItem(String barcode)
     {
         return itemDAO.getItem(barcode);
     }
 
-    public DeleteStatus deleteItem(int id)
+    DeleteStatus deleteItem(int id)
     {
         return itemDAO.deleteItem(id);
+    }
+
+    List<Item> getBasketItems(Basket basket)
+    {
+        return itemDAO.getBasketItems(basket);
+    }
+
+    List<Item> getPromotionItems(Promotion promo)
+    {
+        return itemDAO.getPromotionItems(promo);
     }
 
     public void setItemDAO(ItemDAO dao){

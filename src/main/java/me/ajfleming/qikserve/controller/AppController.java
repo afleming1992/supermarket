@@ -1,10 +1,7 @@
 package me.ajfleming.qikserve.controller;
 
 import me.ajfleming.qikserve.message.APIResponse;
-import me.ajfleming.qikserve.model.FreeItemPromotion;
-import me.ajfleming.qikserve.model.Item;
-import me.ajfleming.qikserve.model.MoneyOffPromotion;
-import me.ajfleming.qikserve.model.Promotion;
+import me.ajfleming.qikserve.model.*;
 import me.ajfleming.qikserve.type.DeleteStatus;
 import org.springframework.http.HttpStatus;
 
@@ -76,7 +73,9 @@ public class AppController {
     }
 
     public Promotion getPromotion(int promoId) {
-        return promotionController.getPromotion(promoId);
+        Promotion promo = promotionController.getPromotion(promoId);
+        promo.setValidItems(itemController.getPromotionItems(promo));
+        return promo;
     }
 
     public MoneyOffPromotion save(MoneyOffPromotion promo) {
@@ -117,6 +116,125 @@ public class AppController {
         else
         {
             return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create new basket due to a server error");
+        }
+    }
+
+    public APIResponse addItemToBasket(int basketId, String itemIdentifier, String identifierType)
+    {
+        Basket basket = basketController.getBasket(basketId);
+        if(basket == null) return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Basket");
+
+        Item item;
+        if(identifierType.equals("id")) {
+            try {
+                int id = Integer.parseInt(itemIdentifier);
+                item = itemController.getItem(id);
+            }
+            catch(NumberFormatException e)
+            {
+                return new APIResponse(HttpStatus.BAD_REQUEST, "Id needs to be a number");
+            }
+        }
+        else if(identifierType.equals("barcode")) {
+            item = itemController.getItem(itemIdentifier);
+        }
+        else
+        {
+            return new APIResponse(HttpStatus.BAD_REQUEST, "Type parameter must be either barcode or id");
+        }
+
+        if(item == null)
+        {
+            return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Item");
+        }
+
+        if(basketController.addItemToBasket(basket,item))
+        {
+            return new APIResponse(HttpStatus.OK, "Item added");
+        }
+        else
+        {
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Could not add Item to Basket due to internal server error");
+        }
+    }
+
+    public APIResponse removeItemFromBasket(int basketId, String itemIdentifier, String identifierType)
+    {
+        Basket basket = basketController.getBasket(basketId);
+        if(basket == null) return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Basket");
+
+        Item item;
+        if(identifierType.equals("id")) {
+            try {
+                int id = Integer.parseInt(itemIdentifier);
+                item = itemController.getItem(id);
+            }
+            catch(NumberFormatException e)
+            {
+                return new APIResponse(HttpStatus.BAD_REQUEST, "Id needs to be a number");
+            }
+        }
+        else if(identifierType.equals("barcode")) {
+            item = itemController.getItem(itemIdentifier);
+        }
+        else
+        {
+            return new APIResponse(HttpStatus.BAD_REQUEST, "Type parameter must be either barcode or id");
+        }
+
+        if(item == null)
+        {
+            return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Item");
+        }
+
+        if(basketController.removeItemToBasket(basket,item))
+        {
+            return new APIResponse(HttpStatus.OK, "Item Removed");
+        }
+        else
+        {
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Could not remove Item to Basket due to internal server error");
+        }
+    }
+
+    public Basket getBasket(int basketId) {
+        Basket basket = basketController.getBasket(basketId);
+        basket.setItemsInBasket(itemController.getBasketItems(basket));
+        return basket;
+    }
+
+
+    public APIResponse addItemToPromotion(int promoId, int itemId) {
+        Promotion promotion = promotionController.getPromotion(promoId);
+        if(promotion == null) return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Promotion");
+
+        Item item = itemController.getItem(itemId);
+        if(item == null) return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Item");
+
+        if(promotionController.addItemToPromotion(promotion, item))
+        {
+            return new APIResponse(HttpStatus.OK, "Item Added");
+        }
+        else
+        {
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Could not add Item to Promotion due to internal server error");
+        }
+    }
+
+    public APIResponse removeItemFromPromotion(int promoId, int itemId) {
+        Promotion promotion = promotionController.getPromotion(promoId);
+        if(promotion == null) return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Promotion");
+
+        Item item = itemController.getItem(itemId);
+        if(item == null) return new APIResponse(HttpStatus.NOT_FOUND, "Could not find Item");
+
+        if(promotionController.removeItemFromPromotion(promotion, item))
+        {
+            return new APIResponse(HttpStatus.OK, "Item Removed");
+        }
+        else
+        {
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Could not remove Item to Promotion due to internal server error");
         }
     }
 }

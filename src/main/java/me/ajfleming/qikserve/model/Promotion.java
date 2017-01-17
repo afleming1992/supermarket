@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by andrew on 14/01/17.
@@ -93,8 +94,8 @@ public abstract class Promotion {
         return validItems;
     }
 
-    public void setValidItems(HashMap<Integer, Item> validItems) {
-        this.validItems = validItems;
+    public void setValidItems(List<Item> validItems) {
+        this.validItems = ListToHashMapConverter.convertItemListToHashMap(validItems);
     }
 
     public int getNoOfItemsRequired() {

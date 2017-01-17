@@ -20,12 +20,10 @@ import java.util.List;
 public class PromotionController {
 
     private PromotionDAO db;
-    private ItemDAO itemDb;
 
     PromotionController(DataSource ds)
     {
         db = new PromotionDAOImpl_JDBC(ds);
-        itemDb = new ItemDAOImpl_JDBC(ds);
     }
 
     MoneyOffPromotion save(MoneyOffPromotion promotion){
@@ -41,16 +39,18 @@ public class PromotionController {
     }
 
     Promotion getPromotion(int id){
-        Promotion promo = db.getPromotion(id);
-        if(promo != null)
-        {
-            List<Item> items = itemDb.getPromotionItems(promo);
-            promo.setValidItems(ListToHashMapConverter.convertItemListToHashMap(items));
-        }
-        return promo;
+        return db.getPromotion(id);
     }
 
     DeleteStatus deletePromotion(int promoId) {
         return db.deletePromotion(promoId);
+    }
+
+    boolean addItemToPromotion(Promotion promotion, Item item) {
+        return db.addItemToPromotion(promotion,item);
+    }
+
+    boolean removeItemFromPromotion(Promotion promotion, Item item) {
+        return db.removeItemFromPromotion(promotion, item);
     }
 }

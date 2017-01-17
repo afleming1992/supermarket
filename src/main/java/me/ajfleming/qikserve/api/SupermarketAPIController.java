@@ -1,6 +1,7 @@
 package me.ajfleming.qikserve.api;
 
 import com.google.gson.Gson;
+import com.mysql.fabric.Response;
 import me.ajfleming.qikserve.controller.AppController;
 import me.ajfleming.qikserve.message.APIResponse;
 import me.ajfleming.qikserve.model.*;
@@ -36,8 +37,13 @@ public class SupermarketAPIController {
     @RequestMapping(value = "/item", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity addItem(@RequestBody Item item){
         try {
-            appController.save(item);
-            return new ResponseEntity(HttpStatus.CREATED);
+            Item result = appController.save(item);
+            if(result.getId() == 0)
+            {
+                APIResponse response = new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Can not add Item");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<Item>(result, HttpStatus.CREATED);
         }
         catch(Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -120,8 +126,24 @@ public class SupermarketAPIController {
     public ResponseEntity deletePromotion(@PathVariable int promoId)
     {
         APIResponse result = appController.deletePromotion(promoId);
-        return new ResponseEntity<String>(toJSON(result), result.getStatus());
+        return new ResponseEntity<>(toJSON(result), result.getStatus());
     }
+
+
+    @RequestMapping(value = "/promotion/{promoId}/item/{itemId}", method = RequestMethod.POST, produces="application/json")
+    public ResponseEntity addItemToPromotion(@PathVariable int promoId, @PathVariable int itemId)
+    {
+        APIResponse result = appController.addItemToPromotion(promoId, itemId);
+        return new ResponseEntity<>(toJSON(result), result.getStatus());
+    }
+
+    @RequestMapping(value = "/promotion/{promoId}/item/{itemId}", method = RequestMethod.DELETE, produces="application/json")
+    public ResponseEntity removeItemFromPromotion(@PathVariable int promoId, @PathVariable int itemId)
+    {
+        APIResponse result = appController.removeItemFromPromotion(promoId, itemId);
+        return new ResponseEntity<>(toJSON(result), result.getStatus());
+    }
+
 
     /**
      * Basket API Calls
@@ -133,6 +155,33 @@ public class SupermarketAPIController {
         APIResponse result = appController.createBasket();
         return new ResponseEntity<>(toJSON(result), result.getStatus());
     }
+
+    @RequestMapping(value = "/basket/{basketId}", method = RequestMethod.GET, produces="application/json")
+    public ResponseEntity getBasket(@PathVariable int basketId)
+    {
+        Basket result = appController.getBasket(basketId);
+        if(result != null)
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(new APIResponse(HttpStatus.NOT_FOUND,"Basket Not Found"), HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value = "/basket/{basketId}/item/{itemIdentifier}", method = RequestMethod.POST, produces="application/json")
+    public ResponseEntity addItemToBasket(@PathVariable int basketId, @PathVariable String itemIdentifier, String type)
+    {
+        if(type == null){ type = "barcode"; }
+        APIResponse result = appController.addItemToBasket(basketId, itemIdentifier, type);
+        return new ResponseEntity<>(toJSON(result), result.getStatus());
+    }
+
+    @RequestMapping(value = "/basket/{basketId}/item/{itemIdentifier}", method = RequestMethod.DELETE, produces="application/json")
+    public ResponseEntity deleteItemFromBasket(@PathVariable int basketId, @PathVariable String itemIdentifier, String type)
+    {
+        if(type == null){ type = "barcode"; }
+        APIResponse result = appController.removeItemFromBasket(basketId, itemIdentifier, type);
+        return new ResponseEntity<>(toJSON(result), result.getStatus());
+    }
+
 
     //Helper Methods
     private String toJSON(Object obj){

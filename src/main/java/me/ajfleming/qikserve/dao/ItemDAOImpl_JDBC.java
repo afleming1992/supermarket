@@ -1,6 +1,7 @@
 package me.ajfleming.qikserve.dao;
 
 import me.ajfleming.qikserve.helpers.RowMapperConverter;
+import me.ajfleming.qikserve.model.Basket;
 import me.ajfleming.qikserve.model.Item;
 import me.ajfleming.qikserve.model.Promotion;
 import me.ajfleming.qikserve.type.DeleteStatus;
@@ -84,10 +85,23 @@ public class ItemDAOImpl_JDBC implements ItemDAO {
 
     @Override
     public List<Item> getPromotionItems(Promotion promo) {
-        String sql = "SELECT i.* FROM item i, promotion p, promotionItem pi WHERE pi.item = i.id AND pi.promotion = ?";
+        String sql = "SELECT i.* FROM item i, promotion p, promotionItem pi WHERE pi.itemId = i.id AND pi.promotionId = ?";
         try
         {
             return jdbc.query(sql, new Object[] { promo.getId() }, RowMapperConverter.getRowMapperForItem());
+        }
+        catch(EmptyResultDataAccessException e)
+        {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Item> getBasketItems(Basket basket){
+        String sql = "SELECT i.* FROM item i, basketItem bi WHERE bi.itemId = i.id AND bi.basketId = ?";
+        try
+        {
+            return jdbc.query(sql, new Object[] { basket.getId() }, RowMapperConverter.getRowMapperForItem());
         }
         catch(EmptyResultDataAccessException e)
         {

@@ -21,5 +21,8 @@ public interface PromotionDAO {
 
     List<Promotion> getAnItemsPromotions(Item item);
 
+    boolean addItemToPromotion(Promotion promo, Item item);
+    boolean removeItemFromPromotion(Promotion promo, Item item);
+
     DeleteStatus deletePromotion(int id);
 }

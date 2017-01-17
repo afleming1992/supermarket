@@ -1,18 +1,18 @@
 package me.ajfleming.qikserve.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by andrew on 14/01/17.
  */
 @Entity
-@Table(name = "basket")
 public class Basket {
 
     @Id
@@ -20,14 +20,32 @@ public class Basket {
     private int id;
 
     private boolean completed = false;
+    @JsonIgnore
     private Timestamp timestamp;
+    private String orderCreatedTimeStamp;
     private float finalTotal = 0;
     private float totalSavings = 0;
 
-    private HashMap<Integer, Item> itemsInBasket;
+    @Transient
+    private List<Item> itemsInBasket;
+
+    @Transient
     private HashSet<BasketPromotion> promotionsInBasket;
 
     public Basket(){}
+
+    public Basket(boolean completed, Timestamp timestamp) {
+        this.completed = completed;
+        setTimestamp(timestamp);
+    }
+
+
+    public Basket(boolean completed, Timestamp timestamp, float finalTotal, float totalSavings) {
+        this.completed = completed;
+        setTimestamp(timestamp);
+        this.finalTotal = finalTotal;
+        this.totalSavings = totalSavings;
+    }
 
     public int getId() {
         return id;
@@ -51,6 +69,7 @@ public class Basket {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+        setOrderCreatedTimeStamp(new SimpleDateFormat("dd/MM/yyyy hh:mm").format(timestamp));
     }
 
     public float getFinalTotal() {
@@ -69,11 +88,19 @@ public class Basket {
         this.totalSavings = totalSavings;
     }
 
-    public HashMap<Integer, Item> getItemsInBasket() {
+    public String getOrderCreatedTimeStamp() {
+        return orderCreatedTimeStamp;
+    }
+
+    private void setOrderCreatedTimeStamp(String orderCreatedTimeStamp) {
+        this.orderCreatedTimeStamp = orderCreatedTimeStamp;
+    }
+
+    public List<Item> getItemsInBasket() {
         return itemsInBasket;
     }
 
-    public void setItemsInBasket(HashMap<Integer, Item> itemsInBasket) {
+    public void setItemsInBasket(List<Item> itemsInBasket) {
         this.itemsInBasket = itemsInBasket;
     }
 
