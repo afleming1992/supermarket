@@ -148,6 +148,19 @@ public class PromotionDAOImpl_JDBC implements PromotionDAO {
     }
 
     @Override
+    public List<Item> getPromotionItems(Promotion promo) {
+        String sql = "SELECT i.* FROM item i, promotion p, promotionItem pi WHERE pi.itemId = i.id AND pi.promotionId = ?";
+        try
+        {
+            return jdbc.query(sql, new Object[] { promo.getId() }, RowMapperConverter.getRowMapperForItem());
+        }
+        catch(EmptyResultDataAccessException e)
+        {
+            return null;
+        }
+    }
+
+    @Override
     public List<Promotion> getAnItemsPromotions(Item item) {
         try {
             String sql = "SELECT p.* FROM promotion_v p, promotionItem pi WHERE p.active = TRUE AND p.promo_id = pi.promotion AND pi.item = ?";

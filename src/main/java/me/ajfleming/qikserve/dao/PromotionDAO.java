@@ -20,6 +20,7 @@ public interface PromotionDAO {
     Promotion getPromotion(int id);
 
     List<Promotion> getAnItemsPromotions(Item item);
+    List<Item> getPromotionItems(Promotion promo);
 
     boolean addItemToPromotion(Promotion promo, Item item);
     boolean removeItemFromPromotion(Promotion promo, Item item);

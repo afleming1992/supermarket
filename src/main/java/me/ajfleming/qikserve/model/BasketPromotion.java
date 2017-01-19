@@ -1,7 +1,11 @@
 package me.ajfleming.qikserve.model;
 
+import me.ajfleming.qikserve.helpers.ItemComparator;
+import me.ajfleming.qikserve.helpers.MathsOperations;
+
 import javax.persistence.*;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,12 +16,25 @@ public class BasketPromotion {
     @Id
     @GeneratedValue
     private int id;
-    private Basket basket;
+    private int basketId;
     private Promotion promo;
-    private float price;
+    private float promotionPrice;
+    private float totalSavings;
     private List<Item> items;
 
     public BasketPromotion(){}
+
+    public BasketPromotion(Promotion promotion, int basketId) {
+        this.promo = promotion;
+        this.basketId = basketId;
+        this.items = new ArrayList<>();
+    }
+
+    public void calculatePriceAndTotalSavings() {
+        Collections.sort(items, new ItemComparator());
+        promotionPrice = promo.calculateFinalPrice(items);
+        totalSavings = MathsOperations.calculatePriceOfItems(items) - promotionPrice;
+    }
 
     public int getId() {
         return id;
@@ -27,28 +44,33 @@ public class BasketPromotion {
         this.id = id;
     }
 
-    public Basket getBasket() {
-        return basket;
-    }
-
-    public void setBasket(Basket basket) {
-        this.basket = basket;
-    }
-
     public Promotion getPromotion() {
         return promo;
     }
 
-    public void setPromo(Promotion promo) {
+    public void setPromotion(Promotion promo) {
         this.promo = promo;
     }
 
-    public float getPrice() {
-        return price;
+    public float getPromotionPrice() {
+        return promotionPrice;
     }
 
-    public void setPrice(float price) {
-        this.price = price;
+    public void setPromotionPrice(float promotionPrice) {
+        this.promotionPrice = promotionPrice;
+    }
+
+    public int getBasketId() {
+        return basketId;
+    }
+
+    public void setBasketId(int basketId) {
+        this.basketId = basketId;
+    }
+
+    public void addItem(Item item)
+    {
+        items.add(item);
     }
 
     public List<Item> getItems() {
@@ -57,5 +79,13 @@ public class BasketPromotion {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public float getTotalSavings() {
+        return totalSavings;
+    }
+
+    public void setTotalSavings(float totalSavings){
+        this.totalSavings = totalSavings;
     }
 }

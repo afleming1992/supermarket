@@ -1,8 +1,11 @@
 package me.ajfleming.qikserve.dao;
 
+import me.ajfleming.qikserve.holder.BasketItem;
+import me.ajfleming.qikserve.holder.ValidPromotion;
 import me.ajfleming.qikserve.model.Basket;
 import me.ajfleming.qikserve.model.BasketPromotion;
 import me.ajfleming.qikserve.model.Item;
+import me.ajfleming.qikserve.model.Promotion;
 
 import java.util.List;
 
@@ -12,10 +15,15 @@ import java.util.List;
 public interface BasketDAO {
 
     int createBasket();
-    Basket editBasket(Basket basket);
+    Basket updateBasket(Basket basket);
     Basket getBasket(int id);
     List<Basket> getBaskets();
 
+    List<Item> getBasketItems(Basket basket);
+
     boolean addItemToBasket(Basket basket, Item item);
-    boolean removeItemToBasket(Basket basket, Item item);
+    boolean removeItemFromBasket(Basket basket, Item item);
+
+    List<ValidPromotion> getAllValidPromotionsInBasket(Basket basket);
+    List<BasketItem> getAllBasketItemsPartOfPromotion(Basket basket, Promotion promotion);
 }

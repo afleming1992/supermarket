@@ -12,11 +12,14 @@ import java.util.List;
  */
 public interface BasketPromotionDAO {
 
-    public BasketPromotion save(BasketPromotion basketPromo);
-    public boolean deleteBasketPromotion(BasketPromotion basketPromo);
+    BasketPromotion save(BasketPromotion basketPromo);
+    boolean deleteBasketPromotion(BasketPromotion basketPromo);
+
+    BasketPromotion getBasketPromotion(int basketPromotionId);
+    List<BasketPromotion> getBasketPromotions(Basket basket);
 
     List<Item> getBasketPromotionItems(BasketPromotion promo);
 
-    public boolean addItemToBasketPromotion(BasketPromotion promo, Item item);
-    public boolean deleteItemToBasketPromotion(BasketPromotion promo, Item item);
+    boolean addItemToBasketPromotion(BasketPromotion promo, Item item);
+    boolean deleteItemToBasketPromotion(BasketPromotion promo, Item item);
 }

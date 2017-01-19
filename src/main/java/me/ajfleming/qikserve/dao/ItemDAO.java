@@ -18,7 +18,4 @@ public interface ItemDAO {
     Item getItem(int id);
     Item getItem(String barcode);
     DeleteStatus deleteItem(int id);
-
-    List<Item> getPromotionItems(Promotion promo);
-    List<Item> getBasketItems(Basket basket);
 }

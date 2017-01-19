@@ -56,6 +56,8 @@ public abstract class Promotion {
         this.validItems = ListToHashMapConverter.convertItemListToHashMap(validItems);
     }
 
+    public abstract float calculateFinalPrice(List<Item> items);
+
     public void addItem(Item item){
         validItems.put(item.getId(), item);
     }

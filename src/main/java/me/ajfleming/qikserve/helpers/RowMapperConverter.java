@@ -14,38 +14,7 @@ public class RowMapperConverter {
     public static RowMapper<Promotion> getRowMapperForPromotions(){
         return new RowMapper<Promotion>(){
             public Promotion mapRow(ResultSet rs, int rowNum) throws SQLException {
-                int noOfFreeItems = rs.getInt("noOfFreeItems");
-                float totalPrice = rs.getFloat("totalPrice");
-                if(noOfFreeItems == 0 && totalPrice != 0)
-                {
-                    //MoneyOffPromo
-                    MoneyOffPromotion promotion = new MoneyOffPromotion();
-                    setPromotionCommonValues(promotion, rs);
-                    promotion.setTotalPrice(totalPrice);
-                    return promotion;
-                }
-                else if(noOfFreeItems != 0 & totalPrice == 0f)
-                {
-                    //FreeItemPromo
-                    FreeItemPromotion promotion = new FreeItemPromotion();
-                    setPromotionCommonValues(promotion, rs);
-                    promotion.setNoOfItemsFree(noOfFreeItems);
-                    return promotion;
-                }
-                else
-                {
-                    //Promotion Sub-Type Table Record is missing for this record :S
-                    return null;
-                }
-            }
-
-            private Promotion setPromotionCommonValues(Promotion promotion, ResultSet rs) throws SQLException
-            {
-                promotion.setId(rs.getInt("promo_id"));
-                promotion.setName(rs.getString("name"));
-                promotion.setActive(rs.getBoolean("active"));
-                promotion.setNoOfItemsRequired(rs.getInt("noOfItemsRequired"));
-                return promotion;
+                return RowMapperConverter.mapPromotionRow(rs, rowNum);
             }
         };
     }
@@ -66,7 +35,7 @@ public class RowMapperConverter {
     }
 
     public static RowMapper<Basket> getRowMapperForBasket() {
-        return new RowMapper<Basket>(){
+        return new RowMapper<Basket>() {
             public Basket mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Basket basket = new Basket();
                 basket.setId(rs.getInt("id"));
@@ -77,5 +46,55 @@ public class RowMapperConverter {
                 return basket;
             }
         };
+    }
+
+    public static RowMapper<BasketPromotion> getRowMapperForBasketPromotions() {
+        return new RowMapper<BasketPromotion>(){
+            public BasketPromotion mapRow(ResultSet rs, int rowNum) throws SQLException {
+                BasketPromotion basketPromotion = new BasketPromotion();
+                basketPromotion.setId(rs.getInt("id"));
+                basketPromotion.setPromotionPrice(rs.getFloat("price"));
+                basketPromotion.setTotalSavings(rs.getFloat("totalSavings"));
+                Promotion p = mapPromotionRow(rs, rowNum);
+
+                basketPromotion.setPromotion(p);
+                return basketPromotion;
+            }
+        };
+    }
+
+    public static Promotion mapPromotionRow(ResultSet rs, int rowNum) throws SQLException{
+        int noOfFreeItems = rs.getInt("noOfFreeItems");
+        float totalPrice = rs.getFloat("totalPrice");
+        if(noOfFreeItems == 0 && totalPrice != 0)
+        {
+            //MoneyOffPromo
+            MoneyOffPromotion promotion = new MoneyOffPromotion();
+            setPromotionCommonValues(promotion, rs);
+            promotion.setTotalPrice(totalPrice);
+            return promotion;
+        }
+        else if(noOfFreeItems != 0 & totalPrice == 0f)
+        {
+            //FreeItemPromo
+            FreeItemPromotion promotion = new FreeItemPromotion();
+            setPromotionCommonValues(promotion, rs);
+            promotion.setNoOfItemsFree(noOfFreeItems);
+            return promotion;
+        }
+        else
+        {
+            //Promotion Sub-Type Table Record is missing for this record :S
+            return null;
+        }
+    }
+
+    private static Promotion setPromotionCommonValues(Promotion promotion, ResultSet rs) throws SQLException
+    {
+        promotion.setId(rs.getInt("promo_id"));
+        promotion.setName(rs.getString("name"));
+        promotion.setActive(rs.getBoolean("active"));
+        promotion.setNoOfItemsRequired(rs.getInt("noOfItemsRequired"));
+        return promotion;
     }
 }

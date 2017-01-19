@@ -48,16 +48,6 @@ public class ItemController {
         return itemDAO.deleteItem(id);
     }
 
-    List<Item> getBasketItems(Basket basket)
-    {
-        return itemDAO.getBasketItems(basket);
-    }
-
-    List<Item> getPromotionItems(Promotion promo)
-    {
-        return itemDAO.getPromotionItems(promo);
-    }
-
     public void setItemDAO(ItemDAO dao){
         this.itemDAO = dao;
     }

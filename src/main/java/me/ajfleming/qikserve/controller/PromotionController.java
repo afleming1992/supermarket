@@ -53,4 +53,8 @@ public class PromotionController {
     boolean removeItemFromPromotion(Promotion promotion, Item item) {
         return db.removeItemFromPromotion(promotion, item);
     }
+
+    public List<Item> getPromotionItems(Promotion promo) {
+        return db.getPromotionItems(promo);
+    }
 }

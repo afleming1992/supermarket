@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "item")
 public class Item {
-
     @Id
     private int id = 0;
 

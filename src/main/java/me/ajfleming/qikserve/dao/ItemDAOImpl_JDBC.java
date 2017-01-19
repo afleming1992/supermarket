@@ -71,40 +71,11 @@ public class ItemDAOImpl_JDBC implements ItemDAO {
     }
 
     @Override
-    public Item getItem(String barcode){
-        String sql = "SELECT * FROM item WHERE barcode = ? AND active = true";
-        try
-        {
-            return jdbc.queryForObject(sql, new Object[] { barcode }, RowMapperConverter.getRowMapperForItem());
-        }
-        catch(EmptyResultDataAccessException e)
-        {
-            return null;
-        }
-    }
-
-    @Override
-    public List<Item> getPromotionItems(Promotion promo) {
-        String sql = "SELECT i.* FROM item i, promotion p, promotionItem pi WHERE pi.itemId = i.id AND pi.promotionId = ?";
-        try
-        {
-            return jdbc.query(sql, new Object[] { promo.getId() }, RowMapperConverter.getRowMapperForItem());
-        }
-        catch(EmptyResultDataAccessException e)
-        {
-            return null;
-        }
-    }
-
-    @Override
-    public List<Item> getBasketItems(Basket basket){
-        String sql = "SELECT i.* FROM item i, basketItem bi WHERE bi.itemId = i.id AND bi.basketId = ?";
-        try
-        {
-            return jdbc.query(sql, new Object[] { basket.getId() }, RowMapperConverter.getRowMapperForItem());
-        }
-        catch(EmptyResultDataAccessException e)
-        {
+    public Item getItem(String barcode) {
+        String sql = "SELECT * FROM item WHERE barcode = ? AND active = TRUE";
+        try {
+            return jdbc.queryForObject(sql, new Object[]{barcode}, RowMapperConverter.getRowMapperForItem());
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }

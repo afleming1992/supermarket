@@ -166,6 +166,13 @@ public class SupermarketAPIController {
             return new ResponseEntity<>(new APIResponse(HttpStatus.NOT_FOUND,"Basket Not Found"), HttpStatus.NOT_FOUND);
     }
 
+    @RequestMapping(value = "/basket/{basketId}", method = RequestMethod.POST, produces="application/json")
+    public ResponseEntity finaliseAndCloseBasket(@PathVariable int basketId)
+    {
+        APIResponse result = appController.finaliseAndCloseBasket(basketId);
+        return new ResponseEntity<>(toJSON(result), result.getStatus());
+    }
+
     @RequestMapping(value = "/basket/{basketId}/item/{itemIdentifier}", method = RequestMethod.POST, produces="application/json")
     public ResponseEntity addItemToBasket(@PathVariable int basketId, @PathVariable String itemIdentifier, String type)
     {

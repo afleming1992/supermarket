@@ -75,7 +75,7 @@ public class AppController {
 
     public Promotion getPromotion(int promoId) {
         Promotion promo = promotionController.getPromotion(promoId);
-        promo.setValidItems(itemController.getPromotionItems(promo));
+        promo.setValidItems(promotionController.getPromotionItems(promo));
         return promo;
     }
 
@@ -202,7 +202,7 @@ public class AppController {
 
     public Basket getBasket(int basketId) {
         Basket basket = basketController.getBasket(basketId);
-        basket.setItemsInBasket(itemController.getBasketItems(basket));
+        basket.setItemsInBasket(basketController.getBasketItems(basket));
         return basket;
     }
 
@@ -250,6 +250,7 @@ public class AppController {
         }
 
         try {
+            basketController.setUpValidPromotions(basket);
             basket = basketController.calculatePriceAndSavings(basket);
             basket.setCompleted(true);
             basketController.updateBasket(basket);
