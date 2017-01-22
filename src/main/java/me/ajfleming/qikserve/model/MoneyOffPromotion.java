@@ -3,6 +3,7 @@ package me.ajfleming.qikserve.model;
 import me.ajfleming.qikserve.helpers.MathsOperations;
 
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;

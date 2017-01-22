@@ -32,7 +32,9 @@ public abstract class Promotion {
     @Min(value = 1, message = "You must set noOfItemsRequired to a Non-Zero value")
     private int noOfItemsRequired;
 
+    @Transient
     private List<Item> validItems;
+    @Transient
     public final String type = "";
 
     public Promotion(){}

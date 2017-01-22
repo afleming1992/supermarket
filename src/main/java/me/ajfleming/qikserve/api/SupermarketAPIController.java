@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import me.ajfleming.qikserve.controller.AppController;
 import me.ajfleming.qikserve.exception.BadRequestException;
 import me.ajfleming.qikserve.holder.APIResponse;
+import me.ajfleming.qikserve.holder.PromotionRequest;
 import me.ajfleming.qikserve.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

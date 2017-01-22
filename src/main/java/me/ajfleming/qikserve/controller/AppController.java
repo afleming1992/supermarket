@@ -3,6 +3,7 @@ package me.ajfleming.qikserve.controller;
 import me.ajfleming.qikserve.exception.BadRequestException;
 import me.ajfleming.qikserve.exception.BasketException;
 import me.ajfleming.qikserve.holder.APIResponse;
+import me.ajfleming.qikserve.holder.PromotionRequest;
 import me.ajfleming.qikserve.model.*;
 import me.ajfleming.qikserve.type.DeleteStatus;
 import org.springframework.http.HttpStatus;
@@ -102,7 +103,6 @@ public class AppController {
     public FreeItemPromotion save(FreeItemPromotion promo){
         return promotionController.save(promo);
     }
-
 
     public APIResponse addItemToPromotion(int promoId, int itemId) {
         Promotion promotion = promotionController.getPromotion(promoId);
@@ -260,6 +260,10 @@ public class AppController {
         return basket;
     }
 
+
+    /**
+     * This Method performs the checkout and final totalisation of the Basket's Price and Total Savings
+     */
     public APIResponse finaliseAndCloseBasket(int basketId)
     {
         Basket basket = basketController.getBasket(basketId);
@@ -269,7 +273,7 @@ public class AppController {
         }
 
         try {
-            basketController.setUpValidPromotions(basket);
+            basketController.findAndSaveValidPromotions(basket);
             basket = basketController.calculatePriceAndSavings(basket);
             basket.setCompleted(true);
             basketController.updateBasket(basket);

@@ -77,10 +77,10 @@ class BasketController {
     }
 
     /**
-     * Basket Finalisation Methods
+     * Basket Checkout and Totaling Methods
      */
 
-    boolean setUpValidPromotions(Basket basket) {
+    boolean findAndSaveValidPromotions(Basket basket) {
         List<BasketItem> itemsToCleanUp = new ArrayList<>();
 
         List<ValidPromotion> promotions = db.getAllValidPromotionsInBasket(basket);
@@ -91,9 +91,13 @@ class BasketController {
 
                 Iterator<BasketItem> basketItems = db.getAllBasketItemsPartOfPromotion(basket, promo.getPromotion()).iterator();
                 int noOfValidPromotions = promo.getNoOfItemsInBasket() / promo.getPromotion().getNoOfItemsRequired();
+
+                //For Each Valid Promotion
                 for (int i = 0; i < noOfValidPromotions; i++) {
                     BasketPromotion basketPromotion = new BasketPromotion(promo.getPromotion(), basket.getId());
                     basketPromotion = basketPromotionDb.save(basketPromotion);
+
+                    //For Number of Items required in a Promotion
                     for (int j = 0; j < promo.getPromotion().getNoOfItemsRequired(); j++) {
                         BasketItem bi = basketItems.next();
                         bi.setItem(itemDb.getItem(bi.getItemId()));
@@ -106,6 +110,8 @@ class BasketController {
                 }
             }
         }
+
+        //Remove all Items from the basket that have valid promotions
         cleanUpItemsFromBasket(basket, itemsToCleanUp);
         return true;
     }
