@@ -6,15 +6,32 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/supermarket" />
-        <property name="username" value="application" />
-        <property name="password" value="andrew" />
+    <bean id="dbProperties"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:config/application.properties" />
     </bean>
 
-    <bean id="superMarket" class="me.ajfleming.qikserve.api.SupermarketAPIController">
-        <constructor-arg ref="dataSource" />
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="${spring.datasource.url}" />
+        <property name="username" value="${spring.datasource.username}" />
+        <property name="password" value="${spring.datasource.password}" />
+    </bean>
+
+    <bean id="basketDAO" class="me.ajfleming.qikserve.dao.BasketDAOImpl_JDBC">
+        <constructor-arg name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="basketPromotionDAO" class="me.ajfleming.qikserve.dao.BasketPromotionDAOImpl_JDBC">
+        <constructor-arg name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="itemDAO" class="me.ajfleming.qikserve.dao.ItemDAOImpl_JDBC">
+        <constructor-arg name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="promotionDAO" class="me.ajfleming.qikserve.dao.PromotionDAOImpl_JDBC">
+        <constructor-arg name="dataSource" ref="dataSource" />
     </bean>
 
 </beans>

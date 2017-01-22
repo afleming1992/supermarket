@@ -3,6 +3,7 @@ package me.ajfleming.qikserve.api;
 import com.google.gson.Gson;
 import com.mysql.fabric.Response;
 import me.ajfleming.qikserve.controller.AppController;
+import me.ajfleming.qikserve.exception.BadRequestException;
 import me.ajfleming.qikserve.message.APIResponse;
 import me.ajfleming.qikserve.model.*;
 import org.springframework.http.HttpStatus;
@@ -15,14 +16,15 @@ import java.util.List;
 /**
  * Created by andrew on 14/01/17.
  */
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class SupermarketAPIController {
 
     private AppController appController;
 
-    public SupermarketAPIController(DataSource db){
-        appController = new AppController(db);
+    public SupermarketAPIController(){
+        appController = new AppController();
     }
 
     /**
@@ -50,16 +52,19 @@ public class SupermarketAPIController {
         }
     }
 
-    @RequestMapping(value = "/item/{itemId}", method = RequestMethod.GET, produces="application/json")
-    public ResponseEntity getItem(@PathVariable int itemId){
-        Item result = appController.getItem(itemId);
-        if(result == null)
-        {
-            return new ResponseEntity<String>(toJSON("No Item Found using ID: " + itemId), HttpStatus.NOT_FOUND);
+    @RequestMapping(value = "/item/{itemIdentifier}", method = RequestMethod.GET, produces="application/json")
+    public ResponseEntity getItem(@PathVariable String itemIdentifier, String type){
+        if(type == null) type = "id";
+        try {
+            Item result = appController.getItem(itemIdentifier, type);
+            if (result == null)
+                return new ResponseEntity<String>(toJSON("No Item Found using "+ type +": " + itemIdentifier), HttpStatus.NOT_FOUND);
+            else
+                return new ResponseEntity<Item>(result, HttpStatus.OK);
         }
-        else
+        catch(BadRequestException e)
         {
-            return new ResponseEntity<Item>(result, HttpStatus.OK);
+            return new ResponseEntity<String>(toJSON("Type parameter must be either barcode or id"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -74,20 +79,6 @@ public class SupermarketAPIController {
     {
         APIResponse result = appController.deleteItem(itemId);
         return new ResponseEntity<String>(toJSON(result), result.getStatus());
-    }
-
-    @RequestMapping(value = "/item/barcode/{barcode}", method = RequestMethod.GET, produces="application/json")
-    public ResponseEntity getItemByBarcode(@PathVariable String barcode)
-    {
-        Item result = appController.getItem(barcode);
-        if(result == null)
-        {
-            return new ResponseEntity<String>(toJSON("No Item Found using Barcode: " + barcode), HttpStatus.NOT_FOUND);
-        }
-        else
-        {
-            return new ResponseEntity<Item>(result, HttpStatus.OK);
-        }
     }
 
     /**
@@ -189,8 +180,10 @@ public class SupermarketAPIController {
         return new ResponseEntity<>(toJSON(result), result.getStatus());
     }
 
+    /**
+     * Helper Methods
+     **/
 
-    //Helper Methods
     private String toJSON(Object obj){
         Gson gson = new Gson();
         return gson.toJson(obj);

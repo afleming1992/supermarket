@@ -30,7 +30,7 @@ public class Basket {
     private List<Item> itemsInBasket;
 
     @Transient
-    private HashSet<BasketPromotion> promotionsInBasket;
+    private List<BasketPromotion> promotionsInBasket;
 
     public Basket(){}
 
@@ -38,7 +38,6 @@ public class Basket {
         this.completed = completed;
         setTimestamp(timestamp);
     }
-
 
     public Basket(boolean completed, Timestamp timestamp, float finalTotal, float totalSavings) {
         this.completed = completed;
@@ -104,11 +103,11 @@ public class Basket {
         this.itemsInBasket = itemsInBasket;
     }
 
-    public HashSet<BasketPromotion> getPromotionsInBasket() {
+    public List<BasketPromotion> getPromotionsInBasket() {
         return promotionsInBasket;
     }
 
-    public void setPromotionsInBasket(HashSet<BasketPromotion> promotionsInBasket) {
+    public void setPromotionsInBasket(List<BasketPromotion> promotionsInBasket) {
         this.promotionsInBasket = promotionsInBasket;
     }
 }

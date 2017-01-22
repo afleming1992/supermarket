@@ -1,5 +1,6 @@
 package me.ajfleming.qikserve.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import me.ajfleming.qikserve.helpers.ListToHashMapConverter;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * Created by andrew on 14/01/17.
  */
 @Table(name = "promotion")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class Promotion {
 
     @Id
@@ -29,7 +31,7 @@ public abstract class Promotion {
     @Min(value = 1, message = "You must set noOfItemsRequired to a Non-Zero value")
     private int noOfItemsRequired;
 
-    private HashMap<Integer, Item> validItems;
+    private List<Item> validItems;
     public final String type = "";
 
     public Promotion(){}
@@ -53,13 +55,13 @@ public abstract class Promotion {
     private void setupPromotion(String name, boolean active, int noOfItemsRequired, ArrayList<Item> validItems) {
         this.name = name;
         this.active = active;
-        this.validItems = ListToHashMapConverter.convertItemListToHashMap(validItems);
+        this.validItems = validItems;
     }
 
     public abstract float calculateFinalPrice(List<Item> items);
 
     public void addItem(Item item){
-        validItems.put(item.getId(), item);
+        validItems.add(item.getId(), item);
     }
 
     public void removeItem(Item item){
@@ -92,12 +94,12 @@ public abstract class Promotion {
         this.active = active;
     }
 
-    public HashMap<Integer, Item> getValidItems() {
+    public List<Item> getValidItems() {
         return validItems;
     }
 
     public void setValidItems(List<Item> validItems) {
-        this.validItems = ListToHashMapConverter.convertItemListToHashMap(validItems);
+        this.validItems = validItems;
     }
 
     public int getNoOfItemsRequired() {

@@ -4,6 +4,7 @@ import me.ajfleming.qikserve.helpers.RowMapperConverter;
 import me.ajfleming.qikserve.model.Basket;
 import me.ajfleming.qikserve.model.BasketPromotion;
 import me.ajfleming.qikserve.model.Item;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,16 +23,16 @@ public class BasketPromotionDAOImpl_JDBC implements BasketPromotionDAO {
 
     private JdbcTemplate jdbc;
 
-    public BasketPromotionDAOImpl_JDBC(DataSource ds)
+    public BasketPromotionDAOImpl_JDBC(DataSource dataSource)
     {
-        jdbc = new JdbcTemplate(ds);
+        jdbc = new JdbcTemplate(dataSource);
     }
 
     @Override
     public BasketPromotion save(BasketPromotion basketPromo) {
         if (basketPromo.getId() > 0) {
             String sql = "UPDATE basketPromotion SET basketId = ?, promotionId = ?, price = ?, totalSavings = ? WHERE id = ?";
-            jdbc.update(sql, basketPromo.getBasketId(), basketPromo.getPromotion().getId(), basketPromo.getPromotionPrice(), basketPromo.getTotalSavings());
+            jdbc.update(sql, basketPromo.getBasketId(), basketPromo.getPromotion().getId(), basketPromo.getPromotionPrice(), basketPromo.getTotalSavings(), basketPromo.getId());
             return basketPromo;
         }
         else
@@ -92,7 +93,7 @@ public class BasketPromotionDAOImpl_JDBC implements BasketPromotionDAO {
     @Override
     public List<Item> getBasketPromotionItems(BasketPromotion promo)
     {
-        String sql = "SELECT * FROM item, basketPromotionItem bpi WHERE bpi.basketPromotion = ? AND item.id = bpi.itemId";
+        String sql = "SELECT * FROM item, basketPromotionItem bpi WHERE bpi.basketPromotionId = ? AND item.id = bpi.itemId";
         try
         {
             return jdbc.query(sql, new Object[] { promo.getId() }, RowMapperConverter.getRowMapperForItem());
@@ -105,28 +106,11 @@ public class BasketPromotionDAOImpl_JDBC implements BasketPromotionDAO {
 
     @Override
     public boolean addItemToBasketPromotion(BasketPromotion promo, Item item) {
-        try
-        {
+        try {
             String sql = "INSERT INTO basketPromotionItem (basketPromotionId, itemId) VALUES (?,?)";
             jdbc.update(sql, promo.getId(), item.getId());
             return true;
-        }
-        catch (DataAccessException e)
-        {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean deleteItemToBasketPromotion(BasketPromotion promo, Item item) {
-        try
-        {
-            String sql = "DELETE FROM basketPromotionItem WHERE basketPromotionId = ? AND itemId = ? LIMIT 1";
-            jdbc.update(sql, promo.getId(), item.getId());
-            return true;
-        }
-        catch (DataAccessException e)
-        {
+        } catch (DataAccessException e) {
             return false;
         }
     }

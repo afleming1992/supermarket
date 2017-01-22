@@ -1,15 +1,14 @@
 package me.ajfleming.qikserve.controller;
 
-import me.ajfleming.qikserve.dao.ItemDAO;
-import me.ajfleming.qikserve.dao.ItemDAOImpl_JDBC;
-import me.ajfleming.qikserve.dao.PromotionDAO;
-import me.ajfleming.qikserve.dao.PromotionDAOImpl_JDBC;
+import me.ajfleming.qikserve.dao.*;
 import me.ajfleming.qikserve.helpers.ListToHashMapConverter;
 import me.ajfleming.qikserve.model.FreeItemPromotion;
 import me.ajfleming.qikserve.model.Item;
 import me.ajfleming.qikserve.model.MoneyOffPromotion;
 import me.ajfleming.qikserve.model.Promotion;
 import me.ajfleming.qikserve.type.DeleteStatus;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -17,13 +16,15 @@ import java.util.List;
 /**
  * Created by andrew on 15/01/17.
  */
-public class PromotionController {
+class PromotionController {
 
     private PromotionDAO db;
 
-    PromotionController(DataSource ds)
+    PromotionController()
     {
-        db = new PromotionDAOImpl_JDBC(ds);
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("Spring-Module.xml");
+
+        db = (PromotionDAOImpl_JDBC) ctx.getBean("promotionDAO");
     }
 
     MoneyOffPromotion save(MoneyOffPromotion promotion){
@@ -54,7 +55,7 @@ public class PromotionController {
         return db.removeItemFromPromotion(promotion, item);
     }
 
-    public List<Item> getPromotionItems(Promotion promo) {
+    List<Item> getPromotionItems(Promotion promo) {
         return db.getPromotionItems(promo);
     }
 }

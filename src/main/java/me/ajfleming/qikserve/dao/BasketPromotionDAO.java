@@ -21,5 +21,4 @@ public interface BasketPromotionDAO {
     List<Item> getBasketPromotionItems(BasketPromotion promo);
 
     boolean addItemToBasketPromotion(BasketPromotion promo, Item item);
-    boolean deleteItemToBasketPromotion(BasketPromotion promo, Item item);
 }

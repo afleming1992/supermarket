@@ -7,10 +7,12 @@ import me.ajfleming.qikserve.model.Basket;
 import me.ajfleming.qikserve.model.BasketPromotion;
 import me.ajfleming.qikserve.model.Item;
 import me.ajfleming.qikserve.model.Promotion;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import javax.sql.DataSource;
@@ -28,8 +30,8 @@ public class BasketDAOImpl_JDBC implements BasketDAO {
 
     private JdbcTemplate jdbc;
 
-    public BasketDAOImpl_JDBC(DataSource ds){
-        jdbc = new JdbcTemplate(ds);
+    public BasketDAOImpl_JDBC(DataSource dataSource){
+        jdbc = new JdbcTemplate(dataSource);
     }
 
     @Override

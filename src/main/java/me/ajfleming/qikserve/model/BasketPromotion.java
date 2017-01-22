@@ -1,5 +1,6 @@
 package me.ajfleming.qikserve.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import me.ajfleming.qikserve.helpers.ItemComparator;
 import me.ajfleming.qikserve.helpers.MathsOperations;
 
@@ -16,6 +17,8 @@ public class BasketPromotion {
     @Id
     @GeneratedValue
     private int id;
+
+    @JsonIgnore
     private int basketId;
     private Promotion promo;
     private float promotionPrice;

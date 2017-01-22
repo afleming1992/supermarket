@@ -9,35 +9,45 @@ import me.ajfleming.qikserve.model.Basket;
 import me.ajfleming.qikserve.model.BasketPromotion;
 import me.ajfleming.qikserve.model.Item;
 import me.ajfleming.qikserve.model.Promotion;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by andrew on 15/01/17.
  */
-public class BasketController {
+class BasketController {
 
     private BasketDAO db;
     private BasketPromotionDAO basketPromotionDb;
     private PromotionDAO promotionDb;
     private ItemDAO itemDb;
 
-    BasketController(DataSource ds){
-        db = new BasketDAOImpl_JDBC(ds);
-        basketPromotionDb = new BasketPromotionDAOImpl_JDBC(ds);
-        promotionDb = new PromotionDAOImpl_JDBC(ds);
-        itemDb = new ItemDAOImpl_JDBC(ds);
+    BasketController() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("Spring-Module.xml");
+
+        db = (BasketDAOImpl_JDBC) ctx.getBean("basketDAO");
+        basketPromotionDb = (BasketPromotionDAOImpl_JDBC) ctx.getBean("basketPromotionDAO");
+        promotionDb = (PromotionDAOImpl_JDBC) ctx.getBean("promotionDAO");
+        itemDb = (ItemDAOImpl_JDBC) ctx.getBean("itemDAO");
     }
 
-    int createBasket()
-    {
+    /**
+     * CRUD Operations
+     */
+
+    int createBasket() {
         return db.createBasket();
     }
 
-    Basket updateBasket(Basket basket){ return db.updateBasket(basket); }
+    Basket updateBasket(Basket basket) {
+        return db.updateBasket(basket);
+    }
 
     Basket getBasket(int basketId) {
         return db.getBasket(basketId);
@@ -50,40 +60,38 @@ public class BasketController {
     boolean addItemToBasket(Basket basket, Item item) {
         return db.addItemToBasket(basket, item);
     }
-    boolean removeItemToBasket(Basket basket, Item item) { return db.removeItemFromBasket(basket,item); }
 
-    boolean addPromotionToBasket(Basket basket, Promotion promo, List<Item> items)
-    {
-        BasketPromotion basketPromotion = new BasketPromotion();
-        basketPromotion.setBasketId(basket.getId());
-        basketPromotion.setPromotion(promo);
-        return basketPromotionDb.save(basketPromotion) != null;
+    boolean removeItemToBasket(Basket basket, Item item) {
+        return db.removeItemFromBasket(basket, item);
     }
 
-    //TODO Re-evaluate if I need this method
-    boolean removePromotionFromBasket(BasketPromotion promotion)
-    {
-        return basketPromotionDb.deleteBasketPromotion(promotion);
+    List<BasketPromotion> getBasketPromotions(Basket basket) {
+        List<BasketPromotion> basketPromotions = basketPromotionDb.getBasketPromotions(basket);
+        for (BasketPromotion promo : basketPromotions) {
+            promo.setItems(basketPromotionDb.getBasketPromotionItems(promo));
+        }
+        return basketPromotions;
     }
 
+    /**
+     * Basket Finalisation Methods
+     */
+    
     boolean setUpValidPromotions(Basket basket) {
-        List<BasketItem> itemsToCleanUp = new ArrayList<BasketItem>();
+        List<BasketItem> itemsToCleanUp = new ArrayList<>();
 
         List<ValidPromotion> promotions = db.getAllValidPromotionsInBasket(basket);
-        for(ValidPromotion promo : promotions)
-        {
+        for (ValidPromotion promo : promotions) {
             Promotion p = promotionDb.getPromotion(promo.getPromoId());
-            if(p != null)
-            {
+            if (p != null) {
                 promo.setPromotion(p);
 
                 Iterator<BasketItem> basketItems = db.getAllBasketItemsPartOfPromotion(basket, promo.getPromotion()).iterator();
                 int noOfValidPromotions = promo.getNoOfItemsInBasket() / promo.getPromotion().getNoOfItemsRequired();
-                for(int i = 0; i < noOfValidPromotions; i++)
-                {
+                for (int i = 0; i < noOfValidPromotions; i++) {
                     BasketPromotion basketPromotion = new BasketPromotion(promo.getPromotion(), basket.getId());
-                    for(int j = 0; j < promo.getPromotion().getNoOfItemsRequired(); j++)
-                    {
+                    basketPromotion = basketPromotionDb.save(basketPromotion);
+                    for (int j = 0; j < promo.getPromotion().getNoOfItemsRequired(); j++) {
                         BasketItem bi = basketItems.next();
                         bi.setItem(itemDb.getItem(bi.getItemId()));
                         itemsToCleanUp.add(bi);
@@ -99,11 +107,9 @@ public class BasketController {
         return true;
     }
 
-    private boolean cleanUpItemsFromBasket(Basket basket, List<BasketItem> items)
-    {
-        for(BasketItem i : items)
-        {
-            db.removeItemFromBasket(basket,i.getItem());
+    private boolean cleanUpItemsFromBasket(Basket basket, List<BasketItem> items) {
+        for (BasketItem i : items) {
+            db.removeItemFromBasket(basket, i.getItem());
         }
         return true;
     }
@@ -116,8 +122,7 @@ public class BasketController {
         float finalTotal = MathsOperations.calculatePriceOfItems(basketItems);
         float totalSavings = 0;
 
-        for(BasketPromotion bp : basketPromotions)
-        {
+        for (BasketPromotion bp : basketPromotions) {
             finalTotal += bp.getPromotionPrice();
             totalSavings += bp.getTotalSavings();
         }

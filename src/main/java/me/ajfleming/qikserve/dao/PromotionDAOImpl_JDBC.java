@@ -6,6 +6,7 @@ import me.ajfleming.qikserve.model.Item;
 import me.ajfleming.qikserve.model.MoneyOffPromotion;
 import me.ajfleming.qikserve.model.Promotion;
 import me.ajfleming.qikserve.type.DeleteStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,8 +28,8 @@ public class PromotionDAOImpl_JDBC implements PromotionDAO {
 
     private JdbcTemplate jdbc;
 
-    public PromotionDAOImpl_JDBC(DataSource ds) {
-        jdbc = new JdbcTemplate(ds);
+    public PromotionDAOImpl_JDBC(DataSource dataSource) {
+        jdbc = new JdbcTemplate(dataSource);
     }
 
     private Promotion save(Promotion promo) {
@@ -149,7 +150,7 @@ public class PromotionDAOImpl_JDBC implements PromotionDAO {
 
     @Override
     public List<Item> getPromotionItems(Promotion promo) {
-        String sql = "SELECT i.* FROM item i, promotion p, promotionItem pi WHERE pi.itemId = i.id AND pi.promotionId = ?";
+        String sql = "SELECT DISTINCT i.* FROM item i, promotion p, promotionItem pi WHERE pi.itemId = i.id AND pi.promotionId = ?";
         try
         {
             return jdbc.query(sql, new Object[] { promo.getId() }, RowMapperConverter.getRowMapperForItem());
@@ -221,6 +222,4 @@ public class PromotionDAOImpl_JDBC implements PromotionDAO {
             return DeleteStatus.NOT_FOUND;
         }
     }
-
-
 }

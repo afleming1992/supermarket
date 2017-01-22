@@ -63,7 +63,7 @@ public class RowMapperConverter {
         };
     }
 
-    public static Promotion mapPromotionRow(ResultSet rs, int rowNum) throws SQLException{
+    private static Promotion mapPromotionRow(ResultSet rs, int rowNum) throws SQLException{
         int noOfFreeItems = rs.getInt("noOfFreeItems");
         float totalPrice = rs.getFloat("totalPrice");
         if(noOfFreeItems == 0 && totalPrice != 0)

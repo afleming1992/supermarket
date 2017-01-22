@@ -24,9 +24,8 @@ import java.util.Map;
 public class ItemDAOImpl_JDBC implements ItemDAO {
 
     private JdbcTemplate jdbc;
-
-    public ItemDAOImpl_JDBC(DataSource ds) {
-        jdbc = new JdbcTemplate(ds);
+    public ItemDAOImpl_JDBC(DataSource dataSource) {
+        jdbc = new JdbcTemplate(dataSource);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class ItemDAOImpl_JDBC implements ItemDAO {
 
     @Override
     public List<Item> getItems() {
-        String sql = "SELECT * FROM item";
+        String sql = "SELECT * FROM item WHERE active = TRUE";
         return jdbc.query(sql, RowMapperConverter.getRowMapperForItem());
     }
 
