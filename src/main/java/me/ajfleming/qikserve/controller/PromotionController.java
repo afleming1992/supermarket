@@ -1,7 +1,6 @@
 package me.ajfleming.qikserve.controller;
 
 import me.ajfleming.qikserve.dao.*;
-import me.ajfleming.qikserve.helpers.ListToHashMapConverter;
 import me.ajfleming.qikserve.model.FreeItemPromotion;
 import me.ajfleming.qikserve.model.Item;
 import me.ajfleming.qikserve.model.MoneyOffPromotion;
@@ -10,12 +9,14 @@ import me.ajfleming.qikserve.type.DeleteStatus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Class: AppController
+ *  Purpose: This Class manages all the Promotion Operations. This includes communicating with the Data Access Object
+ *  Author: Andrew Fleming
  */
+
 class PromotionController {
 
     private PromotionDAO db;

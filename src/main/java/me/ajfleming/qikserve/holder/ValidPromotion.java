@@ -3,7 +3,9 @@ package me.ajfleming.qikserve.holder;
 import me.ajfleming.qikserve.model.Promotion;
 
 /**
- * Created by andrew on 19/01/17.
+ *  Class: MathsOperations
+ *  Purpose: This class hold a valid promotion which is calculated during the Basket Checkout Phase.
+ *  Author: Andrew Fleming
  */
 public class ValidPromotion {
 

@@ -4,7 +4,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: Item
+ *  Purpose: This class holds an Item within the Supermarket.
+ *  Author: Andrew Fleming
  */
 @Entity
 @Table(name = "item")

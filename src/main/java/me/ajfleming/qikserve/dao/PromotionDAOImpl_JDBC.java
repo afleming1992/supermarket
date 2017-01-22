@@ -22,8 +22,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Class: PromotionDAOImpl_JDBC
+ *  Purpose: Implementation of the PromotionDAO interface. This uses MySQL for persistence.
+ *  Author: Andrew Fleming
  */
+
 public class PromotionDAOImpl_JDBC implements PromotionDAO {
 
     private JdbcTemplate jdbc;

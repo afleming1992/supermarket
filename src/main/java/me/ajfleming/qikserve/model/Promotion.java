@@ -1,19 +1,20 @@
 package me.ajfleming.qikserve.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import me.ajfleming.qikserve.helpers.ListToHashMapConverter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: Promotion
+ *  Purpose: This class stores all the common promotion properties of all types of promotion offers.
+ *  Author: Andrew Fleming
  */
+
 @Table(name = "promotion")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class Promotion {

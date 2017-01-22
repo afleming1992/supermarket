@@ -5,8 +5,11 @@ import me.ajfleming.qikserve.model.Item;
 import java.util.Comparator;
 
 /**
- * Created by andrew on 19/01/17.
+ *  Class: ItemComparator
+ *  Purpose: This Comparator is used to help sort items into ascending order based on price.
+ *  Author: Andrew Fleming
  */
+
 public class ItemComparator implements Comparator<Item> {
     @Override
     public int compare(Item one, Item another) {

@@ -13,8 +13,11 @@ import javax.sql.DataSource;
 import java.util.List;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: ItemController
+ *  Purpose: This Class manages all the Item Operations. This includes communicating with the Data Access Object
+ *  Author: Andrew Fleming
  */
+
 class ItemController {
 
     private ItemDAO itemDAO;

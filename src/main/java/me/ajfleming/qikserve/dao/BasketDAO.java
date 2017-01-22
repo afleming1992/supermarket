@@ -10,8 +10,11 @@ import me.ajfleming.qikserve.model.Promotion;
 import java.util.List;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Class: BasketDAO
+ *  Purpose: Interface for creating Basket DAO Objects.
+ *  Author: Andrew Fleming
  */
+
 public interface BasketDAO {
 
     int createBasket();

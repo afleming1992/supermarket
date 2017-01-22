@@ -1,21 +1,22 @@
 package me.ajfleming.qikserve.api;
 
 import com.google.gson.Gson;
-import com.mysql.fabric.Response;
 import me.ajfleming.qikserve.controller.AppController;
 import me.ajfleming.qikserve.exception.BadRequestException;
-import me.ajfleming.qikserve.message.APIResponse;
+import me.ajfleming.qikserve.holder.APIResponse;
 import me.ajfleming.qikserve.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: SuperMarketAPIController
+ *  Purpose: This Class creates the Rest API used to interact with the application
+ *  Author: Andrew Fleming
  */
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")

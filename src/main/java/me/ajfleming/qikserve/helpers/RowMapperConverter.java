@@ -7,8 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Class: RowMapperConverter
+ *  Purpose: This class holds static methods for the creation of Row Mappers used by the DAO Implementations to map rows in the db to objects
+ *  Author: Andrew Fleming
  */
+
 public class RowMapperConverter {
 
     public static RowMapper<Promotion> getRowMapperForPromotions(){

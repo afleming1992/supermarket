@@ -19,8 +19,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Class: BasketController
+ *  Purpose: This Class manages all the Basket Operations. This includes communicating with the Data Access Object
+ *  Author: Andrew Fleming
  */
+
 class BasketController {
 
     private BasketDAO db;
@@ -76,7 +79,7 @@ class BasketController {
     /**
      * Basket Finalisation Methods
      */
-    
+
     boolean setUpValidPromotions(Basket basket) {
         List<BasketItem> itemsToCleanUp = new ArrayList<>();
 

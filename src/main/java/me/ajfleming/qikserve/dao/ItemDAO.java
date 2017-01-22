@@ -8,8 +8,11 @@ import me.ajfleming.qikserve.type.DeleteStatus;
 import java.util.List;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: ItemDAO
+ *  Purpose: Interface for Accessing and Saving Items to Database
+ *  Author: Andrew Fleming
  */
+
 public interface ItemDAO {
 
     Item save(Item item);

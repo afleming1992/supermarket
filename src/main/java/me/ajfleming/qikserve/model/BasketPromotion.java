@@ -10,7 +10,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: BasketPromotion
+ *  Purpose: This class holds our model representation of a Promotion within a Basket.
+ *  Author: Andrew Fleming
  */
 public class BasketPromotion {
 

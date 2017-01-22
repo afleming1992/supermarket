@@ -1,21 +1,20 @@
 package me.ajfleming.qikserve.controller;
 
-import javassist.tools.web.BadHttpRequest;
 import me.ajfleming.qikserve.exception.BadRequestException;
 import me.ajfleming.qikserve.exception.BasketException;
-import me.ajfleming.qikserve.message.APIResponse;
+import me.ajfleming.qikserve.holder.APIResponse;
 import me.ajfleming.qikserve.model.*;
 import me.ajfleming.qikserve.type.DeleteStatus;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpStatus;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Class: AppController
+ *  Purpose: This Class does orchestration between the API Layer and the individual Controllers managing each entity
+ *  Author: Andrew Fleming
  */
+
 public class AppController {
 
     private ItemController itemController;

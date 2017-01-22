@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: MoneyOffPromotion
+ *  Purpose: This class holds the specific specialisations of an Money Off Offer (E.g Buy 2 for £5 etc)
+ *  Author: Andrew Fleming
  */
 @Table(name = "promotion")
 public class MoneyOffPromotion extends Promotion {

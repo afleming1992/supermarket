@@ -9,8 +9,11 @@ import me.ajfleming.qikserve.type.DeleteStatus;
 import java.util.List;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Class: PromotionDAO
+ *  Purpose: Interface for the saving and accessing of Promotion Objects.
+ *  Author: Andrew Fleming
  */
+
 public interface PromotionDAO {
 
     FreeItemPromotion save(FreeItemPromotion promo);

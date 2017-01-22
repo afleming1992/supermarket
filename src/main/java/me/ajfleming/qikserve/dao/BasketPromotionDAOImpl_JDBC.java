@@ -17,8 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by andrew on 17/01/17.
+ *  Class: BasketPromotionDAOImpl_JDBC
+ *  Purpose: Implementation of BasketPromotionDAO inteface. This uses MySQL for persistence.
+ *  Author: Andrew Fleming
  */
+
 public class BasketPromotionDAOImpl_JDBC implements BasketPromotionDAO {
 
     private JdbcTemplate jdbc;

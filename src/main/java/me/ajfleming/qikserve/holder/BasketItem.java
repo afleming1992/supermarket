@@ -3,8 +3,11 @@ package me.ajfleming.qikserve.holder;
 import me.ajfleming.qikserve.model.Item;
 
 /**
- * Created by andrew on 19/01/17.
+ *  Class: BasketItem
+ *  Purpose: This class holds items in a Basket during the Basket Calculation Phase.
+ *  Author: Andrew Fleming
  */
+
 public class BasketItem {
 
     private int basketItemId;

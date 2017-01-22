@@ -1,7 +1,16 @@
 package me.ajfleming.qikserve.exception;
 
+
 /**
- * Created by andrew on 17/01/17.
+ *  Class: BasketException
+ *  Purpose: An Simple Exception to differeniate Basket Calculation Errors.
+ *  Author: Andrew Fleming
  */
 public class BasketException extends Exception {
+
+    public BasketException(String message)
+    {
+        super(message);
+    }
+
 }

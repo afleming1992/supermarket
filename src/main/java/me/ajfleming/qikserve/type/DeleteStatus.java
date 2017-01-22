@@ -1,8 +1,10 @@
 package me.ajfleming.qikserve.type;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Enum: DeleteStatus
+ *  Author: Andrew Fleming
  */
+
 public enum DeleteStatus {
 
     NOT_FOUND,

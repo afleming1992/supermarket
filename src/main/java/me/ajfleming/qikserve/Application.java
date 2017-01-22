@@ -4,7 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Created by andrew on 13/01/17.
+ *  Class: Application
+ *  Purpose: This class holds the method to start up the Spring Application
+ *  Author: Andrew Fleming
  */
 
 @SpringBootApplication

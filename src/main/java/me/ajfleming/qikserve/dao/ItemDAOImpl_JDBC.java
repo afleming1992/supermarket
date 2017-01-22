@@ -19,8 +19,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: ItemDAOImpl_JDBC
+ *  Purpose: Implementation of the ItemDAO interface. This uses MySQL for persistence.
+ *  Author: Andrew Fleming
  */
+
 public class ItemDAOImpl_JDBC implements ItemDAO {
 
     private JdbcTemplate jdbc;

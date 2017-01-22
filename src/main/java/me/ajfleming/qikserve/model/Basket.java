@@ -10,7 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: Basket
+ *  Purpose: This class holds our model representation of a Basket.
+ *           A Basket is a set of items with valid promotions which then is used to calculate a final price.
+ *  Author: Andrew Fleming
  */
 @Entity
 public class Basket {

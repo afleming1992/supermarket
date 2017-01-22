@@ -24,8 +24,11 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Created by andrew on 15/01/17.
+ *  Class: BasketDAOImpl_JDBC
+ *  Purpose: Implementation of the BasketDAO Interface. This Implementation uses MySQL
+ *  Author: Andrew Fleming
  */
+
 public class BasketDAOImpl_JDBC implements BasketDAO {
 
     private JdbcTemplate jdbc;

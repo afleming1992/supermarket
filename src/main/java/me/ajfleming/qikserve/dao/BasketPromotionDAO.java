@@ -8,8 +8,11 @@ import me.ajfleming.qikserve.model.Promotion;
 import java.util.List;
 
 /**
- * Created by andrew on 17/01/17.
+ *  Class: BasketPromotionDAO
+ *  Purpose: Interface for Accessing and Saving Basket Promotions
+ *  Author: Andrew Fleming
  */
+
 public interface BasketPromotionDAO {
 
     BasketPromotion save(BasketPromotion basketPromo);

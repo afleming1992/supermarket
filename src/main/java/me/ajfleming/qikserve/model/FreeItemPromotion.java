@@ -11,7 +11,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by andrew on 14/01/17.
+ *  Class: Basket
+ *  Purpose: This class holds the specific specialisations of an Multi Buy Offer (E.g Buy One Get One Free Etc)
+ *  Author: Andrew Fleming
  */
 @Table(name = "promotion")
 public class FreeItemPromotion extends Promotion {
